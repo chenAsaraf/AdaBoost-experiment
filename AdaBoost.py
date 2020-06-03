@@ -9,4 +9,3 @@ x1 = np.array(file[:, 0])
 x2 = np.array(file[:, 2])
 y = np.array(file[:, 1])
 X = np.vstack((x1, x2)).T
-print(X)

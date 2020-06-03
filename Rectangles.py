@@ -89,6 +89,10 @@ class RectangleModel:
         rect = patches.Rectangle(self.bottomLeft, width, height, linewidth=3, edgecolor='r', facecolor='none')
         # Add the patch to the Axes
         ax.add_patch(rect)
+        # Add legend to colors:
+        green_patch = patches.Patch(color='green', label='Positive points (male)')
+        blue_patch = patches.Patch(color='blue', label='Negative points (female)')
+        plt.legend(handles=[green_patch, blue_patch])
         plt.show()
 
 
@@ -118,18 +122,16 @@ def Rectangle(X , y , weights):
         #rectangle.draw()
         # Check the error
         newError = rectangle.error()
-        print(newError)
         if minError > newError:
             minError = newError
             bestRectangle = rectangle
-            print(newError)
     bestRectangle.draw()
     return bestRectangle
 
 
 # TODO: need to be in AdaBoost file 
-def read_data(file):
-    file = np.loadtxt('C:/Users/owner/Desktop/dataset.txt')
+def read_data(path):
+    file = np.loadtxt(path)
     file = np.where(file == 2, -1, file)
     x1 = np.array(file[:, 0])
     x2 = np.array(file[:, 2])
@@ -137,23 +139,12 @@ def read_data(file):
     weights.fill(1/x1.shape[0])
     y = np.array(file[:, 1])
     X = np.vstack((x1, x2)).T
-    print(X.shape)
     return X , y, weights
 
 
 # --------------------------------- #
 # Demo:
 
-# Demo Data:
-#order of columns:x  y label weight
-data = np.array([[0,  0,  1, 1],
-                 [0,  1,  1, 1],
-                 [0.2,0.5,1, 1],
-                 [1,  0, -1, 1],
-                 [1,  1, -1, 1],
-                 [-1, 0, -1, 1]])
-
-
-
-features, labels, weights = read_data(data)
+path= 'C:/Users/owner/Desktop/dataset.txt'
+features, labels, weights = read_data(path)
 Rectangle(features, labels, weights )

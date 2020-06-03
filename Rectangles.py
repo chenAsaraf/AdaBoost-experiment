@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
  Rectangle can c by the 2 points on its diagonal.
  """
 class RectangleModel:
-
     """
     Input:
            - Two points defining the rectangle diagonal
@@ -21,6 +20,7 @@ class RectangleModel:
             the points whose real label is positive stored sequentially
             from the beginning of the data-list.
     """
+
     def __init__(self, upper, bottom, X, y, weights):
         self.data = X
         self.labels = y
@@ -28,10 +28,9 @@ class RectangleModel:
         self.__initPoints(upper, bottom)
         self.truePositive = positives(y)
 
-
     # initialize rectangle borders
-    def __initPoints(self,upper,bottom):
-        if upper[0] <= bottom[0]: # if x coordinate is smaller in upper point
+    def __initPoints(self, upper, bottom):
+        if upper[0] <= bottom[0]:  # if x coordinate is smaller in upper point
             self.upperLeft = upper
             self.bottomRight = bottom
             self.upperRight = [bottom[0], upper[1]]
@@ -42,17 +41,14 @@ class RectangleModel:
             self.upperLeft = [bottom[0], upper[1]]
             self.bottomRight = [upper[0], bottom[1]]
 
-
-
     # Returns the lable that the rectangle gives to the point
-    def h(self,point):
+    def h(self, point):
         # if y-coordinate is between the y's coordinates of the rectangle:
         if point[1] < self.upperLeft[1] and point[1] > self.bottomRight[1]:
             # between x-coordinates:
             if point[0] > self.upperLeft[0] and point[0] < self.bottomRight[0]:
                 return 1
         return -1
-
 
     # Error function:
     # returns the average sum of weights of wrongly placed points.
@@ -63,8 +59,7 @@ class RectangleModel:
             if self.h(self.data[point]) != self.labels[point]:
                 sum = sum + weights[point]
         numberOfSamples = self.data.shape[0]
-        return sum/numberOfSamples
-
+        return sum / numberOfSamples
 
     # Draw the points and the rectangle
     def draw(self):
@@ -101,6 +96,7 @@ def positives(labels):
             break
     return quantity
 
+
 """
 Rectangle function:
     given: * a set of labelled and weighted points,
@@ -114,7 +110,9 @@ Algo:
     2. For each rectangle compute the weighted error
     3. Choose the one that has the smallest error  
 """
-def Rectangle(X , y , weights):
+
+
+def Rectangle(X, y, weights):
     positiveQuantity = positives(y)
     minError = float('inf')
     bestRectangle = []
@@ -127,32 +125,32 @@ def Rectangle(X , y , weights):
             rectangle = RectangleModel(secondPoint, firstPoint, X, y, weights)
         else:
             rectangle = RectangleModel(firstPoint, secondPoint, X, y, weights)
-        #rectangle.draw()
+        # rectangle.draw()
         # Check the error
         newError = rectangle.error()
         if minError > newError:
             minError = newError
             bestRectangle = rectangle
     bestRectangle.draw()
-    return bestRectangle
+    return (bestRectangle, minError)
 
 
-# TODO: need to be in AdaBoost file 
+# TODO: need to be in AdaBoost file
 def read_data(path):
     file = np.loadtxt(path)
     file = np.where(file == 2, -1, file)
     x1 = np.array(file[:, 0])
     x2 = np.array(file[:, 2])
     weights = np.empty(x1.shape[0])
-    weights.fill(1/x1.shape[0])
+    weights.fill(1 / x1.shape[0])
     y = np.array(file[:, 1])
     X = np.vstack((x1, x2)).T
-    return X , y, weights
+    return X, y, weights
 
 
 # --------------------------------- #
 # Demo:
 
-path= 'C:/Users/owner/Desktop/dataset.txt'
+path = 'C:/Users/owner/Desktop/dataset.txt'
 features, labels, weights = read_data(path)
-Rectangle(features, labels, weights )
+Rectangle(features, labels, weights)

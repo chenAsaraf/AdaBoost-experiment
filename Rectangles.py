@@ -13,16 +13,13 @@ class RectangleModel:
     """
     Input:
            - Two points defining the rectangle diagonal
-           - Data set
+           - Data set:
+                * X the points - nx2 matrix
+                * y the labels of the points
+                * weights of the points
      Note: This implementation based on assumption that
-           data set is nx4 matrix, where
-            -  n is the number of samples
-            -  first column is y coordinate
-            -  second column is x coordinate
-            -  third column is true label of the point
-            -  fourth column is point's weight
-            -  the points whose real label is positive stored sequentially
-               from the beginning of the data-list.
+            the points whose real label is positive stored sequentially
+            from the beginning of the data-list.
     """
     def __init__(self, upper, bottom, X, y, weights):
         self.data = X
@@ -58,13 +55,13 @@ class RectangleModel:
                 return 1
         return -1
 
-    """
-    Error:
-    Sum of weights of wrongly placed points.
-    """
+
+    # Error function:
+    # returns the average sum of weights of wrongly placed points.
     def error(self):
         sum = 0
         for point in range(self.data.shape[0]):
+            # if h(x) != y:
             if self.h(self.data[point]) != self.labels[point]:
                 sum = sum + weights[point]
         numberOfSamples = self.data.shape[0]
@@ -106,6 +103,19 @@ def positives(labels):
             break
     return quantity
 
+"""
+Rectangle function:
+    given: * a set of labelled and weighted points,
+           * and the hypothesis class of all axis-parallel rectangles for which
+            the inside is positive and the outside is negative,
+    finds the rectangle which minimizes the weighted error on the points.
+Algo:
+    1. Look for any possible rectangle:
+            by any possible combination of two points labeled positive,
+            which define the diagonal of the rectangle.
+    2. For each rectangle compute the weighted error
+    3. Choose the one that has the smallest error  
+"""
 def Rectangle(X , y , weights):
     positiveQuantity = positives(y)
     minError = float('inf')

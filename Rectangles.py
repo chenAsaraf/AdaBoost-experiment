@@ -50,9 +50,11 @@ class RectangleModel:
     # Returns the lable that the rectangle gives to the point
     def h(self,point):
         # if y-coordinate is between the y's coordinates of the rectangle:
-        if point[1] < self.upperLeft[1] and point[1] > self.bottomLeft[1]:
+        #print(point)
+        #print("self.upperLeft[0]", self.upperLeft[0], "self.bottomLeft[0]", self.bottomLeft[0])
+        if point[1] < self.upperLeft[1] and point[1] > self.bottomRight[1]:
             # between x-coordinates:
-            if point[0] < self.upperLeft[0] and point[0] > self.bottomLeft[0]:
+            if point[0] > self.upperLeft[0] and point[0] < self.bottomRight[0]:
                 return 1
         return -1
 
@@ -65,7 +67,8 @@ class RectangleModel:
         for point in range(self.data.shape[0]):
             if self.h(self.data[point]) != self.labels[point]:
                 sum = sum + weights[point]
-        return sum
+        numberOfSamples = self.data.shape[0]
+        return sum/numberOfSamples
 
 
     # Draw the points and the rectangle
@@ -112,12 +115,14 @@ def Rectangle(X , y , weights):
             rectangle = RectangleModel(secondPoint, firstPoint, X, y, weights)
         else:
             rectangle = RectangleModel(firstPoint, secondPoint, X, y, weights)
-        # rectangle.draw()
+        #rectangle.draw()
         # Check the error
         newError = rectangle.error()
+        print(newError)
         if minError > newError:
             minError = newError
             bestRectangle = rectangle
+            print(newError)
     bestRectangle.draw()
     return bestRectangle
 
@@ -152,4 +157,3 @@ data = np.array([[0,  0,  1, 1],
 
 features, labels, weights = read_data(data)
 Rectangle(features, labels, weights )
-#print(np.arange(0,3))

@@ -47,8 +47,6 @@ class RectangleModel:
     # Returns the lable that the rectangle gives to the point
     def h(self,point):
         # if y-coordinate is between the y's coordinates of the rectangle:
-        #print(point)
-        #print("self.upperLeft[0]", self.upperLeft[0], "self.bottomLeft[0]", self.bottomLeft[0])
         if point[1] < self.upperLeft[1] and point[1] > self.bottomRight[1]:
             # between x-coordinates:
             if point[0] > self.upperLeft[0] and point[0] < self.bottomRight[0]:

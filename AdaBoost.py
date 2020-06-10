@@ -2,6 +2,7 @@ import math
 import numpy as np
 import random
 from Rectangles import Rectangle
+from collections import defaultdict
 
 
 def read_data(path):
@@ -33,34 +34,36 @@ def adaBoost(numberOfModels):
     data = read_data(path)
     dataPointsNumber = data.shape[0]
 
+    # Initialize each point weight to be 1 / n:
     weights = np.empty(dataPointsNumber)
     weights.fill(1 / dataPointsNumber)
 
-    # final results:
-    hypothesis = []
+    # final results containers::
+    hypothesis = defaultdict() # key: rectangle_t, value: alpha_t
 
     for i in range(numberOfModels):
         train, test = splitTestTrain(data)
-        # print(train)
         trainFeatures, trainLabels = splitToFeaturesLabels(train)
-        # print(trainFeatures , trainLabels)
-        bestRectangle, minError = Rectangle(trainFeatures, trainLabels, weights)
-        print("minError: ", minError)
-        new_weights = float(0.5 * np.log((1.0 - minError) / minError))
-        print("new_weights: ", new_weights)
+        # Using Rectangle to find a rectangle with minimum weighted error εt
+        rectangle_t, error_t = Rectangle(trainFeatures, trainLabels, weights)
+        # Rectangle alpha (the weight):
+        alpha_t = float(0.5 * np.log((1.0 - error_t) / error_t))
+        print("alpha_t: ", alpha_t)
         print("------")
+        # Compute new weights for the points:
         for point in range(trainFeatures.shape[0]):
-            if bestRectangle.h(trainFeatures[point]) != trainLabels[point]:
-                # if update_weights(bestRectangle,features[point]) != labels[point]:
-                weights[point] = weights[point] * np.exp(-new_weights)
-            else:
-                weights[point] = weights[point] * np.exp(new_weights)
+            # For an error on point:
+            if rectangle_t.h(trainFeatures[point]) != trainLabels[point]:
+                weights[point] = weights[point] * np.exp(-alpha_t)
+            else: # Not an error on point:
+                weights[point] = weights[point] * np.exp(alpha_t)
+        # Normalize these weights:
         weights /= np.sum(weights)
-    hypothesis.append(bestRectangle)
+    hypothesis[rectangle_t] = alpha_t
+
 
 
 if __name__ == '__main__':
     r = 8
-    for t in range(1, r):
-        for i in range(10):
-            adaBoost(t)
+    for i in range(10):
+        adaBoost(r)

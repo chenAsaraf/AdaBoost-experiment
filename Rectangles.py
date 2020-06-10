@@ -8,8 +8,6 @@ import matplotlib.pyplot as plt
  for which the inside is positive and the outside is negative.
  Rectangle can c by the 2 points on its diagonal.
  """
-
-
 class RectangleModel:
     """
     Input:
@@ -22,25 +20,37 @@ class RectangleModel:
             the points whose real label is positive stored sequentially
             from the beginning of the data-list.
     """
-    def __init__(self, upper, bottom, X, y, w):
+
+    def __init__(self, firstPoint, secondPoint, X, y, w):
         self.data = X
         self.labels = y
         self.weights = w
-        self.__initPoints(upper, bottom)
-        self.truePositive = positives(y)
+        self.__initPoints(firstPoint, secondPoint)
+
 
     # initialize rectangle borders
-    def __initPoints(self, upper, bottom):
-        if upper[0] <= bottom[0]:  # if x coordinate is smaller in upper point
-            self.upperLeft = upper
-            self.bottomRight = bottom
-            self.upperRight = [bottom[0], upper[1]]
-            self.bottomLeft = [upper[0], bottom[1]]
+    def __initPoints(self, firstPoint, secondPoint):
+        up = 0
+        down = 0
+        left = 0
+        right = 0
+        if firstPoint[0] <= secondPoint[0]:  # if x coordinate is smaller in first point
+            right = secondPoint[0]
+            left = firstPoint[0]
+        elif firstPoint[0] > secondPoint[0]:
+            right = firstPoint[0]
+            left = secondPoint[0]
+        if firstPoint[1] <= secondPoint[1]:  # if y coordinate is smaller in first point
+            up = secondPoint[1]
+            down = firstPoint[1]
         else:
-            self.upperRight = upper
-            self.bottomLeft = bottom
-            self.upperLeft = [bottom[0], upper[1]]
-            self.bottomRight = [upper[0], bottom[1]]
+            up = firstPoint[1]
+            down = secondPoint[1]
+        self.upperLeft = [left, up]
+        self.upperRight = [right, up]
+        self.bottomRight = [right,down]
+        self.bottomLeft = [left, down]
+
 
     # Returns the lable that the rectangle gives to the point
     def h(self, point):
@@ -59,7 +69,6 @@ class RectangleModel:
             # if h(x) != y:
             if self.h(self.data[point]) != self.labels[point]:
                 sum = sum + self.weights[point]
-        # numberOfSamples = self.data.shape[0]
         return sum
 
     # Draw the points and the rectangle
@@ -68,14 +77,15 @@ class RectangleModel:
         fig = plt.gcf()
         ax = fig.gca()
         for i in range(self.data.shape[0]):
-            if self.labels[i] == 1:  # Positive points:
+            if self.labels[i] == 1: # Positive points:
                 plt.scatter(self.data[i, 0], self.data[i, 1], color="green", s=30)
-            else:  # Negative points:
+            else:# Negative points:
                 plt.scatter(self.data[i, 0], self.data[i, 1], color="blue", s=30)
         ax.grid()
         # Create a Rectangle patch
         width = self.bottomRight[0] - self.bottomLeft[0]
         height = self.upperLeft[1] - self.bottomLeft[1]
+        print("*****", self.bottomLeft)
         rect = patches.Rectangle(self.bottomLeft, width, height, linewidth=3, edgecolor='r', facecolor='none')
         # Add the patch to the Axes
         ax.add_patch(rect)
@@ -86,15 +96,19 @@ class RectangleModel:
         plt.show()
 
 
-# Returns the number of points whose real label is positive
-def positives(labels):
-    quantity = 0
-    for index in range(labels.shape[0]):
-        if labels[index] == 1:
-            quantity += 1
-        else:
-            break
-    return quantity
+
+class NegativeRectangleModel(RectangleModel):
+    def __init__(self, firstPoint, secondPoint, X, y, w):
+        super(NegativeRectangleModel, self).__init__(firstPoint, secondPoint, X, y, w)
+
+    # Returns the lable that the rectangle gives to the point
+    def h(self, point):
+        # if y-coordinate is between the y's coordinates of the rectangle:
+        if point[1] < self.upperLeft[1] and point[1] > self.bottomRight[1]:
+            # between x-coordinates:
+            if point[0] > self.upperLeft[0] and point[0] < self.bottomRight[0]:
+                return -1
+        return 1
 
 
 """
@@ -110,8 +124,6 @@ Algo:
     2. For each rectangle compute the weighted error
     3. Choose the one that has the smallest error  
 """
-
-
 def Rectangle(X, y, weights):
     minError = float('inf')
     bestRectangle = []
@@ -119,24 +131,18 @@ def Rectangle(X, y, weights):
     for comb in list(allPossible):
         firstPoint = comb[0]
         secondPoint = comb[1]
-        # Create rectangle
-        if firstPoint[1] < secondPoint[1]:
-            rectangle = RectangleModel(secondPoint, firstPoint, X, y, weights)
-        else:
-            rectangle = RectangleModel(firstPoint, secondPoint, X, y, weights)
-        # rectangle.draw()
+        # Create rectangles: first inside positive then inside negative:
+        negRectangle = NegativeRectangleModel(firstPoint, secondPoint, X, y, weights)
+        posRectangle = RectangleModel(firstPoint, secondPoint, X, y, weights)
         # Check the error
-        newError = rectangle.error()
-        if minError > newError:
-            minError = newError
-            bestRectangle = rectangle
+        negError = negRectangle.error()
+        posError = posRectangle.error()
+        if minError > negError:
+            minError = negError
+            bestRectangle = negRectangle
+        if minError > posError:
+            minError = posError
+            bestRectangle = posRectangle
     #bestRectangle.draw()
     return bestRectangle, minError
 
-
-# --------------------------------- #
-# Demo:
-
-path = 'C:/Users/Roi Abramovitch/Downloads/לימודים מדעי המחשב/שנה ג/למידת מכונה/מטלות/מטלה 2/HC_Body_Temperature'
-# features, labels, weights = read_data(path)
-# Rectangle(features, labels, weights)

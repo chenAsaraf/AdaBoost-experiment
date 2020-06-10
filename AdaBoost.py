@@ -89,7 +89,7 @@ if __name__ == '__main__':
                 for index_t in range(len(H)):
                     sign += alphas[index_t] * H[index_t].h(trainFeatures[point])
                 errorTrain += int(sign * trainLabels[point] < 0)
-        print('r:', r, 'average error:',  (errorTest/ iteration)/65)
+        print('r:', r, 'average error:',  (errorTest / iteration)/65)
         print('r:', r, 'average error:', (errorTrain / iteration) / 65)
 
 

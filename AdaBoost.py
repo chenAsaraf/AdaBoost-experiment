@@ -6,7 +6,7 @@ import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 
 """
-Read data from Hope College data set Temperature data set.
+Read data from Hope College data set Temperature.
 Note: The first column is Body temperature in degrees Fahrenheit,
       the second is Gender (1 = male, 2 = female)
       and the third is Heart rate in beats per minute

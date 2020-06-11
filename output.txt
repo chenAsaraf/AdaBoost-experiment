@@ -1,0 +1,21 @@
+C:\Users\owner\AppData\Local\Programs\Python\Python36\python.exe C:/Users/owner/Documents/AdaBoost-rectangles-/AdaBoost.py
+-----------
+Rectangles: 
+r: 1 test average error: 0.4329230769230769 train  average error: 0.32646153846153847
+r: 2 test average error: 0.44 train  average error: 0.34615384615384615
+r: 3 test average error: 0.42646153846153845 train  average error: 0.2692307692307692
+r: 4 test average error: 0.4276923076923077 train  average error: 0.2732307692307693
+r: 5 test average error: 0.4363076923076923 train  average error: 0.23846153846153847
+r: 6 test average error: 0.43353846153846154 train  average error: 0.24138461538461536
+r: 7 test average error: 0.43984615384615383 train  average error: 0.20584615384615385
+r: 8 test average error: 0.43430769230769234 train  average error: 0.21784615384615386
+-----------
+Circles: 
+r: 1 test average error: 0.4349230769230769 train  average error: 0.3133846153846154
+r: 2 test average error: 0.4410769230769231 train  average error: 0.3090769230769231
+r: 3 test average error: 0.4421538461538461 train  average error: 0.2695384615384615
+r: 4 test average error: 0.4489230769230769 train  average error: 0.272
+r: 5 test average error: 0.46092307692307694 train  average error: 0.22384615384615386
+r: 6 test average error: 0.43953846153846154 train  average error: 0.2521538461538462
+r: 7 test average error: 0.4632307692307692 train  average error: 0.2003076923076923
+r: 8 test average error: 0.43984615384615383 train  average error: 0.22353846153846152

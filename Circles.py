@@ -125,6 +125,5 @@ def Circle(X, y, weights):
             if minError > circles[i].error():
                 minError = circles[i].error()
                 bestCircle = circles[i]
-    #bestRectangle.draw()
     return bestCircle, minError
 

@@ -14,7 +14,9 @@ For each run, randomly dividing the points into 50% training points R and 50% te
 Then run AdaBoost on R, and after computing the final hypothesis, find its error T.
 Dataset contains 130 data points. The label (1 and -1) will be the gender, and the temperature and heartrate define the 2-dimensional point.
 
-## Overfitting:
+### Overfitting:
+As you can see in the output.txt file, the ideal data integration models was usually just 4 models, and no more. What happens is that the train error continues to decline, while the model can no longer be flexible enough for classification of new points.
+
 
 
 ### Exemples:

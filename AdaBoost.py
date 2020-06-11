@@ -51,9 +51,9 @@ def adaBoost(trainFeatures, trainLabels, numberOfModels):
         for point in range(trainFeatures.shape[0]):
             # For an error on point:
             if rectangle_t.h(trainFeatures[point]) != trainLabels[point]:
-                weights[point] = weights[point] * np.exp(-alpha_t)
-            else: # Not an error on point:
                 weights[point] = weights[point] * np.exp(alpha_t)
+            else: # Not an error on point:
+                weights[point] = weights[point] * np.exp(-alpha_t)
         # Normalize these weights:
         weights /= np.sum(weights)
         hypothesis.append(rectangle_t)
@@ -67,7 +67,8 @@ if __name__ == '__main__':
     path = 'C:/Users/Roi Abramovitch/Downloads/לימודים מדעי המחשב/שנה ג/למידת מכונה/מטלות/מטלה 2/HC_Body_Temperature'
     data = read_data(path)
     dataPointsNumber = data.shape[0]
-
+    errorTest = 0.0
+    errorTrain = 0.0
     R = 9
     iteration = 10
     for r in range(1, R):
@@ -89,7 +90,6 @@ if __name__ == '__main__':
                 for index_t in range(len(H)):
                     sign += alphas[index_t] * H[index_t].h(trainFeatures[point])
                 errorTrain += int(sign * trainLabels[point] < 0)
-        print('r:', r, 'average error:',  (errorTest / iteration)/65)
-        print('r:', r, 'average error:', (errorTrain / iteration) / 65)
-
+        print('the average error in round r:', r, 'in the Test dataset:', (errorTest / iteration) / 65)
+        print('the average error in round r:', r, 'in the Train dataset:', (errorTrain / iteration) / 65)
 

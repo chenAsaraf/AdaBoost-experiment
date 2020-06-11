@@ -2,11 +2,20 @@
 
 
 ### About the project:
-In this project, we implement and use the AdaBoost algorithm.
-On a dataset (HC_Body_Temperature) there is a temperature and heart rate and the gender as the label(1 or 2). 
-We change the gender into points when men are +1 and women are -1. We create two classes of Rectangles and Circles for the hypothesis. 
-then we split the dataset to train and test and we train the AdaBoost algorithm on the train dataset.
-We calculate the error on the test dataset, and print the error of the final hypothesis of the test and train dataset
+In this project, we implemented AdaBoost algorithm and experimented to find the ideal number of models.
+The dataset is the Hope College Temperature data set.
+The data described by body temperature in degrees Fahrenheit, the gender (1 = male, 2 = female) and the heart rate in beats per minute.
+
+We changed the gender label  into points when men are +1 and women are -1.
+The hypothesis models in the experiment are rectangles and circles. 
+
+We are running the adaBoost algorithm 100 times for each of r=1,…,8.
+For each run, randomly dividing the points into 50% training points R and 50% test points T.
+Then run AdaBoost on R, and after computing the final hypothesis, find its error T.
+Dataset contains 130 data points. The label (1 and -1) will be the gender, and the temperature and heartrate define the 2-dimensional point.
+
+## Overfitting:
+
 
 ### Exemples:
 
